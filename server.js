@@ -1,59 +1,54 @@
-const app = require('./src/app')
-const debug = require('debug')('nodestr:server')
-const http = require('http')
+const app = require("./src/app");
+const debug = require("debug")("node-angular");
+const http = require("http");
 
+const HOST  = "0.0.0.0"
 
-const PORT = normalizePort(process.env.PORT || 5200)
-const HOST = '0.0.0.0'
+const normalizePort = val => {
+  var port = parseInt(val, 10);
 
-app.set('port', PORT)
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
 
-const SERVER = http.createServer(app)
-SERVER.listen(PORT, HOST)
-SERVER.on('error', onError)
-SERVER.on('listening', onListening)
-console.log(`API executando em ${PORT}!`);
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
-function normalizePort(val) {
-    const port = parseInt(val, 10)
+  return false;
+};
 
-    if(isNaN(port)) {
-        return val
-    }
-    if(port >= 0){
-        return port
-    }
+const onError = error => {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
 
-    return false
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
+  debug("Listening on " + bind);
+};
 
-}
+const port = normalizePort(process.env.PORT || "3000");
 
-function onError(error) {
-    if(error.syscall !== 'listen'){
-        throw error;
-    }
-
-    const bind = typeof port === 'string' ? 'Pipe' + port : 'Port' + port;
-
-    switch(error.code){
-        case 'EACCES':
-            console.error(bind + ' requer priviglégios de administrador');
-            process.exit(1);
-        case 'EADDRINUSE':
-            console.error(bind + ' em uso');
-            process.exit(1);
-        default:
-            throw error;
-    }
-}
-
-function onListening(){
-    const addr = server.address();
-    const bind = typeof addr === 'string' ? 'pipe' + addr : 'port' + addr.port;
-    debug('Ouvindo na porta ' + bind);
-}
-
-
-
-
-
+const server = http.createServer(app);
+server.on("error", onError);
+server.on("listening", onListening);
+server.listen(port, HOST);
+console.log('API rodando na porta ' + port);
