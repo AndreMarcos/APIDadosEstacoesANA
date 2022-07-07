@@ -19,7 +19,12 @@ exports.postEstacao = async (req, res) => {
     dataFlux = queryAPI.queryRows(fluxQuery, {
         next: (row, tableMeta) => {
             const o = tableMeta.toObject(row)
-            dateResponse.push(o)
+            dataRow = {
+                time: o._time,
+                value: o._value,
+                field: o._field
+            }
+            dateResponse.push(dataRow)
         },
         error: (error) => {
             console.error(error)

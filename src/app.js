@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const {InfluxDB} = require('@influxdata/influxdb-client')
 
+
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
@@ -9,6 +10,12 @@ app.use((req, res, next) => {
 })
 
 app.use(express.json());
+
+// Documentação
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('../swagger_output.json')
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 
 
 // InfluxDB verificaçõ de integridade
