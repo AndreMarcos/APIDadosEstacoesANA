@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const {InfluxDB} = require('@influxdata/influxdb-client')
+require('dotenv/config');
 
 
 app.use((req, res, next) => {
@@ -16,12 +17,10 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('../swagger_output.json')
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
-
-
 // InfluxDB verificaçõ de integridade
 const {HealthAPI} = require('@influxdata/influxdb-client-apis')
-const url = 'http://200.98.74.81:8086'
-const token = 'aLkpwadc4JhjtsavVjMaGow9ir4UhGoiYc4nz_Q0NguK74Q0wmuiIqFt9sMTAVNek09KKvUMs7vVh-BssORHnQ=='
+const url = process.env.URL_DB
+const token = process.env.TOKEN_DB
 const conn = new InfluxDB({url, token})
 const healthAPI = new HealthAPI(conn)
 
@@ -37,11 +36,7 @@ healthAPI.getHealth().then((result /* : HealthCheck */) => {
 
 module.exports = conn
 
-app.get('/', (req, res) => {
-    res.send('API rodando na porta 3000')
-})
-
 const RequireEstacoes = require('./routes/estacoes-router')
-app.use('/estacoes', RequireEstacoes)
+app.use('/', RequireEstacoes)
 
 module.exports = app

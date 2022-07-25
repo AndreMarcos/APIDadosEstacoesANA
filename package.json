@@ -21,10 +21,12 @@
     "@influxdata/influxdb-client": "^1.27.0",
     "@influxdata/influxdb-client-apis": "^1.27.0",
     "body-parser": "^1.20.0",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "http": "^0.0.1-security",
     "nodemon": "^2.0.19",
     "swagger-autogen": "^2.21.5",
-    "swagger-ui-express": "^4.4.0"
+    "swagger-ui-express": "^4.4.0",
+    "xml-js": "^1.6.11"
   }
 }

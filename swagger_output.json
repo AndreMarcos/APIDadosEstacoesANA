@@ -2,28 +2,22 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "API DE DADOS ANA",
+    "description": "API desenvolvida para facilitar a captura dos dados das estações disponibilizados pela ANA e também os dados das estações monitoradas pela Rennosonic Tecnologia. Para utilização da requisição diretamente dos dados para da ANA, não será necesário realizar uma autorização. Para requisitar os dados das estações monitoradas pela Rennosonic é necessário um `token` de autorização, você pode adquirir entrando em contato com nossa equipe de suporte: contato@rennosonic.com",
+    "contact" : {
+      "email" : "andre@rennosonic.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE"
+    }
   },
-  "host": "localhost:3000",
-  "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "host": "https://apiestacoes.devmoblie.com",
+  "basePath": "",
   "paths": {
     "/": {
       "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/estacoes/": {
-      "post": {
+        "tags": ["Requsição diretamente dos dados disponibilizados pela ANA"],
         "description": "",
         "parameters": [
           {
@@ -32,17 +26,14 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "dado": {
-                  "example": "any"
+                "id": {
+                  "example": "15400000"
                 },
                 "timeIn": {
-                  "example": "any"
+                  "example": "23/07/2022"
                 },
                 "timeFin": {
-                  "example": "any"
+                  "example": "24/07/2022"
                 }
               }
             }
@@ -53,7 +44,51 @@
             "description": "OK"
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Requsição com o InfluxDB (Dados salvos por nosso sistema de aquisição)"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "UHE_JIRAU_BARRAMENTO"
+                },
+                "dado": {
+                  "example": "Vazao"
+                },
+                "timeIn": {
+                  "example": "2022-07-07T15:00:00Z"
+                },
+                "timeFin": {
+                  "example": "2022-07-06T22:00:00Z"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security" : [
+          {
+            "apiKey" : []
+          }
+        ]
       }
+    }
+  },
+  "securityDefinitions" :{
+    "EstaçõesRennosonic_auth" : {
+      "type" :  "oauth2"
     }
   }
 }
